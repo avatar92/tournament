@@ -15,20 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// app.use(express.static(path.join(__dirname, "client/build")));
-
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "client/build")));
-//   //
-//   app.get("*", (req, res) => {
-//     res.sendfile(path.join((__dirname = "client/build/index.html")));
-//   });
-// }
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/client/public/index.html"));
-// });
-
 const db =
   "mongodb+srv://adel123:adel123@cluster0-siyog.mongodb.net/test?retryWrites=true&w=majority";
 
@@ -48,6 +34,14 @@ app.get("/test", (req, res) => {
 app.use("/api/equipe", equipe);
 app.use("/api/match", match);
 app.use("/api/tournament", tournament);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(port, () => {
   console.log("server is up and running in port 5000");
